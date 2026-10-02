@@ -1,0 +1,143 @@
+name: CI Pipeline - AI Supply Chain Platform
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  # ====================================================
+  # JOB 1: Code Quality & Linting
+  # ====================================================
+  lint:
+    name: Code Quality & Style Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Linting Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black
+
+      - name: Run Flake8 Syntax & Error Check
+        run: |
+          # Stop build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=venv,.venv,airflow/logs
+
+  # ====================================================
+  # JOB 2: Data Pipeline, Model & API Automated Tests
+  # ====================================================
+  test:
+    name: Automated Unit & Integration Tests
+    runs-on: ubuntu-latest
+    needs: lint
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+          POSTGRES_DB: ecommerce_intelligence
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      ENVIRONMENT: test
+      DATABASE_URL: postgresql+psycopg2://postgres:postgrespassword@localhost:5432/ecommerce_intelligence
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      SECRET_KEY: test_secret_key_32_characters_minimum_len_1234
+      PYTHONPATH: .
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate Training & Evaluation Datasets
+        run: |
+          python pipelines/generate_dataset.py
+          python ml/features/build_features.py
+
+      - name: Train Models & Serialize Artifacts
+        run: |
+          python ml/training/train_forecasting.py
+          python ml/training/train_stockout.py
+          python ml/training/train_anomaly.py
+
+      - name: Run Alembic Migrations & Database Seeding
+        run: |
+          cd backend
+          alembic upgrade head
+          cd ..
+          python -m backend.app.db.seed
+
+      - name: Execute Pytest Suite
+        run: |
+          pytest -v -s
+
+  # ====================================================
+  # JOB 3: Docker Build Verification (Smoke Test)
+  # ====================================================
+  docker-smoke-test:
+    name: Docker Build Verification
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Smoke-Build Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./backend/Dockerfile
+          push: false
+          tags: backend:ci-test
+
+      - name: Smoke-Build Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: false
+          tags: frontend:ci-test
