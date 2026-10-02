@@ -1,9 +1,3 @@
-"""
-scripts/verify_ci_locally.py
-Simulates the GitHub Actions CI pipeline locally to catch regressions before git push.
-Runs linting, pytest, and file checks.
-"""
-
 import subprocess
 import sys
 
@@ -21,10 +15,6 @@ def run_command(name: str, cmd: list[str]) -> bool:
 
 
 def main():
-    print("==================================================")
-    print("LOCAL CI PRE-FLIGHT VERIFICATION")
-    print("==================================================")
-
     steps = [
         ("Flake8 Syntax Linting", [sys.executable, "-m", "flake8", ".", "--count", "--select=E9,F63,F7,F82", "--exclude=venv,.venv,airflow/logs"]),
         ("Pytest Test Suite", [sys.executable, "-m", "pytest", "-v"]),

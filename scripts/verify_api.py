@@ -40,7 +40,6 @@ def test_api_endpoints():
     dash = res.json()
     print(f"    Total SKUs: {dash['total_skus']} | Critical SKUs: {dash['critical_stockout_skus']}")
 
-    print("\n[SUCCESS] All FastAPI REST endpoints validated successfully!")
 
 
 if __name__ == "__main__":

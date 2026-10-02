@@ -1,8 +1,3 @@
-"""
-scripts/verify_docker.py
-Validates running Docker containers, internal network health, and HTTP responses.
-"""
-
 import time
 import urllib.request
 import json
@@ -27,11 +22,6 @@ def check_endpoint(name: str, url: str):
 
 
 def main():
-    print("==================================================")
-    print("DOCKER FULL-STACK CONTAINER VERIFICATION")
-    print("==================================================")
-
-    # Allow container initialization time if freshly started
     time.sleep(2)
 
     backend_ok = check_endpoint("FastAPI Backend Health", "http://localhost:8000/api/v1/health")

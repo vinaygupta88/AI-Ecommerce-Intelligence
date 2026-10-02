@@ -1,8 +1,3 @@
-"""
-scripts/verify_env.py
-Validates the developer workstation environment, dependencies, and file structure.
-"""
-
 import sys
 import os
 import shutil

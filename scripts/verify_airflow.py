@@ -1,10 +1,3 @@
-"""
-scripts/verify_airflow.py
-Zero-dependency AST & Graph topology validator for Airflow DAGs.
-Validates syntax, task cycles, upstream/downstream chaining, and callable imports
-without triggering Windows-specific SQLite/SQLAlchemy 2.0 runtime conflicts.
-"""
-
 import ast
 import importlib.util
 import os
@@ -101,10 +94,6 @@ def run_pipeline_unit_tests():
 
 
 def main():
-    print("==================================================")
-    print("AIRFLOW DAG STATIC & TOPOLOGY VERIFICATION")
-    print("==================================================")
-
     dag_files = [
         os.path.join(DAGS_DIR, "daily_sync_dag.py"),
         os.path.join(DAGS_DIR, "weekly_retrain_dag.py"),
