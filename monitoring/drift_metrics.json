@@ -1,0 +1,79 @@
+{
+  "dataset_drift_detected": true,
+  "total_features_evaluated": 10,
+  "drifted_features_count": 6,
+  "share_of_drifted_columns": 0.6,
+  "action_required": "INVESTIGATE_AND_RETRAIN",
+  "feature_drift_details": {
+    "base_price": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 107.77,
+      "reference_mean": 107.77
+    },
+    "lead_time_days": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 7.24,
+      "reference_mean": 7.24
+    },
+    "closing_stock": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 139.35,
+      "reference_mean": 161.96
+    },
+    "total_units_sold": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 31.17,
+      "reference_mean": 27.55
+    },
+    "sales_velocity_ratio": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 1.04,
+      "reference_mean": 1.0
+    },
+    "rolling_mean_7": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 30.85,
+      "reference_mean": 27.51
+    },
+    "rolling_std_7": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 13.14,
+      "reference_mean": 9.51
+    },
+    "rolling_mean_30": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 29.77,
+      "reference_mean": 27.44
+    },
+    "promotional_flag": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 0.08,
+      "reference_mean": 0.08
+    },
+    "discount_pct": {
+      "drift_detected": false,
+      "drift_score_p_value": 1.0,
+      "stat_test": "kolmogorov_smirnov",
+      "current_mean": 0.02,
+      "reference_mean": 0.02
+    }
+  }
+}
