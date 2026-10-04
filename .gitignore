@@ -68,3 +68,8 @@ out/
 .idea/
 .DS_Store
 Thumbs.db
+
+
+# Pending to excute the following commands to add the new CI/CD pipeline to the repo
+# git add .github/workflows/ci.yml scripts/verify_ci_locally.py backend/app/schemas/supply_chain.py backend/app/core/redis_client.py
+# git commit -m "ci: add automated multi-stage github actions pipeline for linting, tests, and docker verification"

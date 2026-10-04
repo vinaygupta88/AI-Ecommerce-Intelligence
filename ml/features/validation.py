@@ -12,14 +12,6 @@ class DataValidationError(Exception):
 
 
 def validate_raw_transactions(df: pd.DataFrame) -> bool:
-    """
-    Validates transactional logs.
-    Ensures:
-      - Required columns exist
-      - No null primary identifiers
-      - Quantities > 0
-      - Unit prices >= 0
-    """
     required_cols = {"order_id", "product_id", "date", "quantity", "unit_price", "discount"}
     missing = required_cols - set(df.columns)
     if missing:
@@ -43,13 +35,6 @@ def validate_raw_transactions(df: pd.DataFrame) -> bool:
 
 
 def validate_daily_aggregations(df: pd.DataFrame) -> bool:
-    """
-    Validates daily aggregated product-level data.
-    Ensures:
-      - Daily inventory >= 0
-      - Daily sales units >= 0
-      - No duplicate product_id + date pairs
-    """
     required_cols = {
         "product_id",
         "date",

@@ -1,0 +1,27 @@
+# Git & OS
+.git/
+.gitignore
+.DS_Store
+Thumbs.db
+
+# Virtual Environments & Python Cache
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / Frontend Build Artifacts
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Database files & local artifacts
+*.sqlite3
+*.db
+mlruns/
+mlartifacts/
